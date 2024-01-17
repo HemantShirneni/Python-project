@@ -9,13 +9,23 @@ class TypingSpeedTestApp:
         self.root.title("Typing Speed Test")
         self.root.configure(bg='Salmon')  # Set background color
 
-        self.sentences = [
-            " There was once a hare who was friends with a Tortoise. One day, He challenged the tortoise to race. Seeing how slow the tortoise was going, The hare thought he'd win this easily.",
-            "Once there was a Dog who wandered the street night and day in search of food. One day, He found a big juicy Bone, and he immediately grabbed it in his mouth and took it home",
-            " THE THIRSTY CROW, After flying a long distance, a thirsty crow wandered the forest searching for water. Finally, He saw a pot half-filled with water.",
-            "Peafowl is a common name for two bird species in the genera Pavo and Afropavo within the tribe Pavonini of the family Phasianidae (the pheasants and their allies). Male peafowl are referred to as peacocks",
-            "In 2013, Kohli was ranked number one in the ICC rankings for ODI batsmen. In 2018, he was ranked top Test batsman, making him the only Indian cricketer to hold the number one spot in all three formats of the game. ",
+        self.easy_sentences = [
+            "The quick brown fox jumps over the lazy dog.",
+            "A journey of a thousand miles begins with a single step.",
+            "All that glitters is not gold.",
+            "Actions speak louder than words.",
+            "Haste makes waste.",
         ]
+
+        self.hard_sentences = [
+            "In the beginning God created the heavens and the earth.",
+            "To be or not to be, that is the question.",
+            "All the world's a stage, and all the men and women merely players.",
+            "To thine own self be true.",
+            "The only limit to our realization of tomorrow will be our doubts of today.",
+        ]
+
+        self.history = []  # Store typing test results
 
         self.headline_label = tk.Label(root, text="Test Your Typing Skills", font=("Algerian", 32, "bold"), fg="black", bg='Salmon')
         self.headline_label.pack(pady=20)
@@ -29,11 +39,24 @@ class TypingSpeedTestApp:
         self.timer_label = tk.Label(root, text="Time: 0:00", font=("Arial", 24), fg="black", bg='Salmon')
         self.timer_label.pack()
 
+        self.level_var = tk.StringVar()
+        self.level_var.set("easy")  # Default level is set to easy
+
+        self.level_radio_frame = tk.Frame(root, bg='Salmon')
+        self.easy_radio = tk.Radiobutton(self.level_radio_frame, text="Easy", variable=self.level_var, value="easy", font=("Arial", 18), bg='Salmon')
+        self.easy_radio.pack(side=tk.LEFT, padx=20)
+        self.hard_radio = tk.Radiobutton(self.level_radio_frame, text="Hard", variable=self.level_var, value="hard", font=("Arial", 18), bg='Salmon')
+        self.hard_radio.pack(side=tk.LEFT)
+        self.level_radio_frame.pack(pady=10)
+
         self.start_button = tk.Button(root, text="Start Typing Test", command=self.start_typing_test, bg="black", fg="red", font=("Arial", 18), padx=20, pady=10)
         self.start_button.pack(pady=10)
 
         self.submit_button = tk.Button(root, text="Submit", command=self.submit_typing_test, state=tk.DISABLED, bg="black", fg="red", font=("Arial", 18), padx=20, pady=10)
         self.submit_button.pack(pady=30)
+
+        self.show_history_button = tk.Button(root, text="Show History", command=self.show_history, bg="black", fg="red", font=("Arial", 18), padx=20, pady=10)
+        self.show_history_button.pack(pady=10)
 
         self.start_time = 0
         self.timer_running = False
@@ -52,7 +75,9 @@ class TypingSpeedTestApp:
                 self.root.update()
                 time.sleep(1)
 
-            self.label_sentence.config(text=random.choice(self.sentences))
+            level = self.level_var.get()
+            sentences = self.easy_sentences if level == "easy" else self.hard_sentences
+            self.label_sentence.config(text=random.choice(sentences))
             self.start_time = time.time()
 
     def update_timer(self):
@@ -73,15 +98,28 @@ class TypingSpeedTestApp:
         correct_chars = sum([1 for c1, c2 in zip(sentence, user_input) if c1 == c2])
         accuracy = (correct_chars / len(sentence)) * 100
 
-        messagebox.showinfo(
-            "Typing Test Result",
-            f"Your typing speed: {words_per_minute:.2f} words per minute\nYour typing accuracy: {accuracy:.2f}%"
-        )
+        result_text = f"Your typing speed: {words_per_minute:.2f} words per minute\nYour typing accuracy: {accuracy:.2f}%"
+        messagebox.showinfo("Typing Test Result", result_text)
+
+        # Store typing test result in history
+        self.history.append(result_text)
 
         self.user_input.delete(0, tk.END)
         self.start_button.config(state=tk.NORMAL)
         self.submit_button.config(state=tk.DISABLED)
         self.timer_label.config(text="Time: 0:00")
+
+    def show_history(self):
+        history_window = tk.Toplevel(self.root)
+        history_window.title("Typing Test History")
+        history_window.configure(bg='light blue')
+
+        history_label = tk.Label(history_window, text="Typing Test History", font=("Algerian", 24, "bold"), fg="black", bg='yellow')
+        history_label.pack(pady=20)
+
+        for idx, entry in enumerate(self.history, start=1):
+            history_entry_label = tk.Label(history_window, text=f"{idx}. {entry}", font=("Arial", 18), fg="black", bg='yellow')
+            history_entry_label.pack()
 
 if __name__ == "__main__":
     root = tk.Tk()
