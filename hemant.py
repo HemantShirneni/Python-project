@@ -30,6 +30,12 @@ class TypingSpeedTestApp:
         self.headline_label = tk.Label(root, text="Test Your Typing Skills", font=("Algerian", 32, "bold"), fg="black", bg='Salmon')
         self.headline_label.pack(pady=20)
 
+        # Add label and entry for user's name
+        self.name_label = tk.Label(root, text="Enter your name:", font=("Arial", 18), fg="black", bg='Salmon')
+        self.name_label.pack(pady=10)
+        self.name_entry = tk.Entry(root, font=("Arial", 18), bd=3, relief=tk.GROOVE)
+        self.name_entry.pack(pady=10)
+
         self.label_sentence = tk.Label(root, text="", font=("Arial", 26), wraplength=500, justify='center')
         self.label_sentence.pack(pady=20)
 
@@ -98,13 +104,17 @@ class TypingSpeedTestApp:
         correct_chars = sum([1 for c1, c2 in zip(sentence, user_input) if c1 == c2])
         accuracy = (correct_chars / len(sentence)) * 100
 
-        result_text = f"Your typing speed: {words_per_minute:.2f} words per minute\nYour typing accuracy: {accuracy:.2f}%"
+        # Get the name entered by the user
+        user_name = self.name_entry.get()
+
+        result_text = f"{user_name}, your typing speed: {words_per_minute:.2f} words per minute\nYour typing accuracy: {accuracy:.2f}%"
         messagebox.showinfo("Typing Test Result", result_text)
 
         # Store typing test result in history
         self.history.append(result_text)
 
         self.user_input.delete(0, tk.END)
+        self.name_entry.delete(0, tk.END)  # Clear the name entry
         self.start_button.config(state=tk.NORMAL)
         self.submit_button.config(state=tk.DISABLED)
         self.timer_label.config(text="Time: 0:00")
