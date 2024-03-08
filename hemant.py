@@ -30,7 +30,7 @@ class TypingSpeedTestApp:
 
         self.history = []  # Store typing test results
 
-        self.headline_label = tk.Label(root, text="Test Your Typing Skills", font=("Algerian", 32, "bold"), fg="black", bg='Salmon')
+        self.headline_label = tk.Label(root, text="Test Your Typing Skills", font=("Algerian", 30, "bold"), fg="black", bg='Salmon')
         self.headline_label.pack(pady=20)
 
         # Add label and entry for user's name
@@ -39,13 +39,13 @@ class TypingSpeedTestApp:
         self.name_entry = tk.Entry(root, font=("Arial", 18), bd=3, relief=tk.GROOVE, textvariable=self.name)
         self.name_entry.pack(pady=10)
 
-        self.label_sentence = tk.Label(root, text="", font=("Arial", 24), wraplength=500, justify='center')
+        self.label_sentence = tk.Label(root, text="", font=("Arial", 22), wraplength=500, justify='center')
         self.label_sentence.pack(pady=20)
 
-        self.user_input = tk.Entry(root, font=("Arial", 24), bd=3, relief=tk.GROOVE)
+        self.user_input = tk.Entry(root, font=("Arial", 22), bd=3, relief=tk.GROOVE)
         self.user_input.pack(pady=10)
 
-        self.timer_label = tk.Label(root, text="Time: 0:00", font=("Arial", 20), fg="black", bg='Salmon')
+        self.timer_label = tk.Label(root, text="Time: 0:00", font=("Arial", 18), fg="black", bg='Salmon')
         self.timer_label.pack()
 
         self.level_var = tk.StringVar()
